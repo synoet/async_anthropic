@@ -1,0 +1,9 @@
+[package]
+name = "messages"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.94"
+async_anthropic = { path = "../../" }
+tokio = { version = "1.42.0", features = ["full"] }
