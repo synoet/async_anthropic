@@ -106,10 +106,7 @@ impl<'c> Messages<'c> {
             while let Some(sse_event) = source.next().await {
                 let event = match sse_event {
                     Ok(e) => match e {
-                        Event::Message(m) => {
-                            dbg!(&m);
-                            m
-                        }
+                        Event::Message(m) => m,
                         Event::Open => {
                             continue;
                         }
