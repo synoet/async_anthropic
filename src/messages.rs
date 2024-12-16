@@ -22,6 +22,8 @@ impl<'c> Messages<'c> {
         Self { client }
     }
 
+    /// Send a structured list of input messages with text and/or image content,
+    /// and the model will generate the next message in the conversation.
     pub async fn create(
         &self,
         request: CreateMessageRequest,
@@ -62,6 +64,10 @@ impl<'c> Messages<'c> {
         Ok(response)
     }
 
+    /// Send a structured list of input messages with text and/or image content,
+    /// and the model will generate the next message in the conversation.
+    ///
+    /// Incrementally streams the response as it becomes available.
     pub async fn create_stream(
         &self,
         request: CreateMessageRequest,
@@ -83,8 +89,6 @@ impl<'c> Messages<'c> {
         let config = config.unwrap_or_default();
         let api_key = self.client.api_key.clone();
         let (wx, rx) = mpsc::unbounded_channel();
-
-        dbg!(&request);
 
         tokio::spawn(async move {
             let url = format!("{}/v1/messages", ANTHROPIC_BASE_URL.to_string());
