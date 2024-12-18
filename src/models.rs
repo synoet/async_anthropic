@@ -14,17 +14,17 @@ pub enum Model {
     #[serde(rename = "claude-3-5-sonnet-20241022")]
     #[strum(serialize = "claude-3-5-sonnet-20241022")]
     Claude35SonnetV2,
-    #[serde(rename = "claude-3-5-sonnet@20230725")]
-    #[strum(serialize = "claude-3-5-sonnet@20230725")]
+    #[serde(rename = "claude-3-5-sonnet-20230725")]
+    #[strum(serialize = "claude-3-5-sonnet-20230725")]
     Claude35Sonnet,
-    #[serde(rename = "claude-3-opus@20230725")]
-    #[strum(serialize = "claude-3-opus@20230725")]
+    #[serde(rename = "claude-3-opus-20240229")]
+    #[strum(serialize = "claude-3-opus-20240229")]
     Claude3Opus,
-    #[serde(rename = "claude-3-haiku@20240307")]
-    #[strum(serialize = "claude-3-haiku@20240307")]
+    #[serde(rename = "claude-3-haiku-20240307")]
+    #[strum(serialize = "claude-3-haiku-20240307")]
     Claude3Haiku,
-    #[serde(rename = "claude-3-sonnet@20240229")]
-    #[strum(serialize = "claude-3-sonnet@20240229")]
+    #[serde(rename = "claude-3-sonnet-20240229")]
+    #[strum(serialize = "claude-3-sonnet-20240229")]
     Claude3Sonnet,
 }
 
