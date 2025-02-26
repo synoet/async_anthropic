@@ -26,6 +26,10 @@ pub enum Model {
     #[serde(rename = "claude-3-sonnet@20240229")]
     #[strum(serialize = "claude-3-sonnet@20240229")]
     Claude3Sonnet,
+
+    #[serde(rename = "claude-3-7-sonnet-20250219")]
+    #[strum(serialize = "claude-3-7-sonnet-20250219")]
+    Claude37Sonnet,
 }
 
 pub trait ModelVersion {
@@ -41,6 +45,7 @@ impl ModelVersion for Model {
             Model::Claude3Opus => "claude-3-opus".to_string(),
             Model::Claude3Haiku => "claude-3-haiku".to_string(),
             Model::Claude3Sonnet => "claude-3-sonnet".to_string(),
+            Model::Claude37Sonnet => "claude-3-7-sonnet".to_string(),
         }
     }
 
@@ -51,7 +56,8 @@ impl ModelVersion for Model {
             "claude-3-opus" => Model::Claude3Opus,
             "claude-3-haiku" => Model::Claude3Haiku,
             "claude-3-sonnet" => Model::Claude3Sonnet,
-            _ => Model::Claude35SonnetV2,
+            "claude-3-7-sonnet" => Model::Claude37Sonnet,
+            _ => Model::Claude37Sonnet,
         }
     }
 }
