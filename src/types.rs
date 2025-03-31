@@ -139,10 +139,10 @@ pub enum StopReason {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Usage {
-    /// The number of input tokens which were used.
-    pub input_tokens: u32,
     /// The number of output tokens which were used.
     pub output_tokens: u32,
+    /// The number of input tokens which were used.
+    pub input_tokens: Option<u32>,
     /// The number of input tokens used to create the cache entry.
     pub cache_creation_input_tokens: Option<u32>,
     /// The number of input tokens read from the cache.
@@ -196,7 +196,6 @@ pub struct CreateMessageResponse {
 pub struct MessageDelta {
     pub stop_reason: Option<StopReason>,
     pub stop_sequence: Option<String>,
-    pub usage: Option<Usage>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -217,6 +216,7 @@ pub enum CreateMessageStreamResponse {
     MessageDelta {
         index: Option<u32>,
         delta: MessageDelta,
+        usage: Usage,
     },
     #[serde(rename = "message_stop")]
     MessageStop,
