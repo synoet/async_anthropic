@@ -18,7 +18,7 @@ impl Default for RequestConfig {
     }
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
 #[serde(untagged)]
 pub enum SystemPrompt {
     Text(String),
@@ -110,15 +110,25 @@ pub struct CreateMessageRequest {
 
 #[derive(Serialize, Deserialize, Clone, Builder, Debug)]
 pub struct Message {
+    /// "user" | "assistant"
     pub role: String,
     pub content: String,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
+#[serde(tag = "type")]
+pub enum CacheControl {
+    #[serde(rename = "ephemeral")]
+    Ephemeral,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
 pub struct Content {
     #[serde(rename = "type")]
     pub c_type: String,
     pub text: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_control: Option<CacheControl>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -227,5 +237,40 @@ pub enum CreateMessageStreamResponse {
 impl CreateMessageRequest {
     pub fn builder() -> CreateMessageRequestBuilder {
         CreateMessageRequestBuilder::default()
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use serde_json::json;
+    #[test]
+    fn test_multipart_system_prompt_with_caching() {
+        let correct_json = json!([
+                {
+                  "type": "text",
+                  "text": "You are an AI assistant tasked with analyzing literary works. Your goal is to provide insightful commentary on themes, characters, and writing style.\n"
+                },
+                {
+                  "type": "text",
+                  "text": "<the entire contents of Pride and Prejudice>",
+                  "cache_control": {"type": "ephemeral"}
+                }
+        ]);
+        let prompt = SystemPrompt::Content(vec![
+            Content { 
+                c_type: "text".to_string(), 
+                text: "You are an AI assistant tasked with analyzing literary works. Your goal is to provide insightful commentary on themes, characters, and writing style.\n".to_string(),
+                cache_control: None
+            },
+            Content {
+                c_type: "text".to_string(),
+                text: "<the entire contents of Pride and Prejudice>".to_string(),
+                cache_control: Some(CacheControl::Ephemeral),
+            }
+        ]);
+        let prompt_json = serde_json::to_value(prompt).unwrap();
+        assert_eq!(correct_json, prompt_json);
+        
     }
 }
